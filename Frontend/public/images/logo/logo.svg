@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100%" viewBox="0 0 1024 768" enable-background="new 0 0 1024 768">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_1" x="0px" y="0px" enable-background="new 0 0 1024 768" viewBox="42.92 213.4 904.17 267.59">
   <g style="" transform="matrix(0.506165, 0, 0, 0.535634, -70.428376, 159.277255)">
     <path d="M 632.279 101.052 L 321.154 101.052 C 266.708 101.052 223.928 156.005 223.928 225.946 L 223.928 475.735 C 223.928 545.676 266.708 600.629 321.154 600.629 L 632.279 600.629 C 686.726 600.629 729.505 545.676 729.505 475.735 L 729.505 225.946 C 729.505 156.005 686.726 101.052 632.279 101.052 Z" style="stroke-width: 1; fill: rgb(70, 94, 254);"/>
     <ellipse style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="488.244" cy="357.082" rx="157.085" ry="186.734"/>
