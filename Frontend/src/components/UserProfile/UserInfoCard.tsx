@@ -1,16 +1,71 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 
+interface User {
+  firstname: string;
+  lastname: string;
+  email: string;
+}
+
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
+
+  const [user, setUser] = useState<User | null>(null);
+  const [editableUser, setEditableUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const response = await axios.get("http://localhost:3001/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(response.data)
+        setUser({
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          email: response.data.email,
+        });
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && user) {
+      setEditableUser(user);
+    }
+  }, [isOpen, user]);
+
+  const handleInputChange = (field: keyof User, value: string) => {
+    if (!editableUser) return;
+    setEditableUser({
+      ...editableUser,
+      [field]: value,
+    });
+  };
+
   const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
+    if (!editableUser) return;
+
+    console.log("Saving changes...", editableUser);
+
+    setUser(editableUser);
     closeModal();
   };
+
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -25,7 +80,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Musharof
+                {user?.firstname ?? "Loading..."}
               </p>
             </div>
 
@@ -34,7 +89,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Chowdhury
+                {user?.lastname ?? "Loading..."}
               </p>
             </div>
 
@@ -43,25 +98,7 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                randomuser@pimjo.com
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Phone
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +09 363 398 46
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Bio
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Team Manager
+                {user?.email ?? "Loading..."}
               </p>
             </div>
           </div>
@@ -100,7 +137,13 @@ export default function UserInfoCard() {
               Update your details to keep your profile up-to-date.
             </p>
           </div>
-          <form className="flex flex-col">
+          <form
+            className="flex flex-col"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSave();
+            }}
+          >
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
@@ -110,37 +153,45 @@ export default function UserInfoCard() {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
                     <Label>First Name</Label>
-                    <Input type="text" value="Musharof" />
+                    <Input
+                      type="text"
+                      value={editableUser?.firstname ?? ""}
+                      onChange={(e) => handleInputChange("firstname", e.target.value)}
+                    />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Last Name</Label>
-                    <Input type="text" value="Chowdhury" />
+                    <Input
+                      type="text"
+                      value={editableUser?.lastname ?? ""}
+                      onChange={(e) => handleInputChange("lastname", e.target.value)}
+                    />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
-                    <Input type="text" value="randomuser@pimjo.com" />
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone</Label>
-                    <Input type="text" value="+09 363 398 46" />
-                  </div>
-
-                  <div className="col-span-2">
-                    <Label>Bio</Label>
-                    <Input type="text" value="Team Manager" />
+                    <Label>Email</Label>
+                    <Input
+                      type="email"
+                      value={editableUser?.email ?? ""}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeModal}>
-                Close
+
+            <div className="mt-6 flex justify-end gap-2">
+              <Button
+                variant="primary"
+                className="h-11 px-7"
+                onClick={closeModal}
+                
+              >
+                Cancel
               </Button>
-              <Button size="sm" onClick={handleSave}>
-                Save Changes
+              <Button className="h-11 px-7" >
+                Save
               </Button>
             </div>
           </form>

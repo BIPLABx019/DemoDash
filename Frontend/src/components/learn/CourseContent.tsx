@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ChevronDown, ChevronUp, FileText, List } from "lucide-react"
-import { QuizContent } from "./QuizContent" // Adjust path as needed
+import { QuizContent } from "./QuizContent" 
 
 interface QuizQuestion {
   id: number
@@ -231,7 +231,6 @@ In conclusion, SIPs offer a structured and disciplined way to invest in mutual f
 
   return (
     <div className="flex h-screen overflow-hidden  dark:text-white/90">
-      {/* Sidebar */}
       <aside className="w-72 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] overflow-y-auto ">
         <div className="p-4 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
           <h1 className="text-xl ">Course Modules</h1>
@@ -269,7 +268,6 @@ In conclusion, SIPs offer a structured and disciplined way to invest in mutual f
         })}
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto">
         {activeLesson ? (
           activeLesson.isQuiz && activeLesson.questions ? (

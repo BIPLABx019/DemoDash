@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate for navigation
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
@@ -16,7 +16,7 @@ export default function SignInForm() {
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,20 +34,33 @@ export default function SignInForm() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", {
-        email: formData.email,
-        password: formData.password,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        "http://localhost:3001/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      setSuccess(response.data.message || "Login successful!");
+      const { token, message } = response.data;
+      if (!token) {
+        setError("No token received from server. Please try again.");
+        return;
+      }
+
+      console.log("Received token:", token); 
+      localStorage.removeItem("token"); 
+      localStorage.setItem("token", token); 
+
+      setSuccess(message || "Login successful!");
       setFormData({ email: "", password: "" });
       setIsChecked(false);
 
-      // Navigate to "/" after successful login
       setTimeout(() => navigate("/"), 1000);
     } catch (err: any) {
       if (axios.isAxiosError(err)) {
@@ -106,7 +119,7 @@ export default function SignInForm() {
                     fill="#34A853"
                   />
                   <path
-                    d="M5.10014 11.7305C4.91165 11.186 4.80257 10.6027 4.80257 9.99992C4.80257 9.3971 4.91165 8.81379 5.09022 8.26935L5.08523 8.1534L2.29464 6.02954L2.20333 6.0721C1.5982 7.25823 1.25098 8.5902 1.25098 9.99992C1.25098 11.4096 1.5982 12.7415 2.20333 13.9277L5.10014 11.7305Z"
+                    d="M5.10014 11.7305C4.91165 11.186 4.80257 10.6027 4.80257 9.99992C4.80257 9.3971 4.91165 8.81379 5.09022 8.26935L5.08523 8.1534L2.29464 6.02954L2.20264 6.0721C1.5982 7.25823 1.25098 8.5902 1.25098 9.99992C1.25098 11.4096 1.5982 12.7415 2.20333 13.9277L5.10014 11.7305Z"
                     fill="#FBBC05"
                   />
                   <path
@@ -206,7 +219,7 @@ export default function SignInForm() {
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
                 Don't have an account?{" "}
                 <Link
-                  to="/"
+                  to="/signup"
                   className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
                 >
                   Sign Up
