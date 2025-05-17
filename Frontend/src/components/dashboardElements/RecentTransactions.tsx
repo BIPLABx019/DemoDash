@@ -13,9 +13,7 @@ interface Product {
   name: string; // Product name
   variants: string; // Number of variants (e.g., "1 Variant", "2 Variants")
   category: string; // Category of the product
-  price: string; // Price of the product (as a string with currency symbol)
-  // status: string; // Status of the product
-  image: string; // URL or path to the product image
+  price: string;
   status: "Delivered" | "Pending" | "Canceled"; // Status of the product
 }
 
@@ -28,7 +26,6 @@ const tableData: Product[] = [
     category: "Laptop",
     price: "$2399.00",
     status: "Delivered",
-    image: "/images/product/product-01.jpg", // Replace with actual image URL
   },
   {
     id: 2,
@@ -37,7 +34,6 @@ const tableData: Product[] = [
     category: "Watch",
     price: "$879.00",
     status: "Pending",
-    image: "/images/product/product-02.jpg", // Replace with actual image URL
   },
   {
     id: 3,
@@ -46,7 +42,6 @@ const tableData: Product[] = [
     category: "SmartPhone",
     price: "$1869.00",
     status: "Delivered",
-    image: "/images/product/product-03.jpg", // Replace with actual image URL
   },
   {
     id: 4,
@@ -55,7 +50,6 @@ const tableData: Product[] = [
     category: "Electronics",
     price: "$1699.00",
     status: "Canceled",
-    image: "/images/product/product-04.jpg", // Replace with actual image URL
   },
   {
     id: 5,
@@ -63,8 +57,7 @@ const tableData: Product[] = [
     variants: "1 Variant",
     category: "Accessories",
     price: "$240.00",
-    status: "Delivered",
-    image: "/images/product/product-05.jpg", // Replace with actual image URL
+    status: "Delivered"
   },
 ];
 
@@ -74,7 +67,7 @@ export default function RecentOrders() {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Recent Transactions
+            Recent Expenses
           </h3>
         </div>
 
@@ -131,16 +124,6 @@ export default function RecentOrders() {
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                   {product.price}
                 </TableCell>
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      {product.price}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.price}
-                </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                   {product.category}
                 </TableCell>
@@ -158,6 +141,13 @@ export default function RecentOrders() {
                     {product.status}
                   </Badge>
                 </TableCell>
+                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  {product.price}
+                </TableCell>
+                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  {product.category}
+                </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>

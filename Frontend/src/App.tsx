@@ -36,6 +36,7 @@ export default function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/expenses" element={<Expenses />} />
             <Route path="/transactions" element={<Transactions />} />
+
           </Route>
 
           {/* Auth Layout */}
